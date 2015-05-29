@@ -302,6 +302,7 @@ uis.controller('uiSelectCtrl',
   };
 
   ctrl.clear = function($event) {
+    ctrl.activeIndex = -1;
     ctrl.select(undefined);
     $event.stopPropagation();
     ctrl.focusser[0].focus();
