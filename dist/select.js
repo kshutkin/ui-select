@@ -1,7 +1,7 @@
 /*!
  * ui-select
  * http://github.com/angular-ui/ui-select
- * Version: 0.12.0 - 2015-05-28T07:44:11.360Z
+ * Version: 0.12.0 - 2015-05-29T20:18:12.258Z
  * License: MIT
  */
 
@@ -559,6 +559,7 @@ uis.controller('uiSelectCtrl',
   };
 
   ctrl.clear = function($event) {
+    ctrl.activeIndex = -1;
     ctrl.select(undefined);
     $event.stopPropagation();
     $timeout(function() {
