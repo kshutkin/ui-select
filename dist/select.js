@@ -1,7 +1,7 @@
 /*!
  * ui-select
  * http://github.com/angular-ui/ui-select
- * Version: 0.12.0 - 2015-05-29T20:18:12.258Z
+ * Version: 0.12.0 - 2015-05-29T20:35:52.105Z
  * License: MIT
  */
 
@@ -487,7 +487,7 @@ uis.controller('uiSelectCtrl',
           if ( ctrl.taggingLabel === false ) {
             if ( ctrl.activeIndex < 0 ) {
               item = ctrl.tagging.fct !== undefined ? ctrl.tagging.fct(ctrl.search) : ctrl.search;
-              if (!item || angular.equals( ctrl.items[0], item ) ) {
+              if (angular.equals( ctrl.items[0], item ) ) {
                 return;
               }
             } else {
