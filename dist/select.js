@@ -1,7 +1,7 @@
 /*!
  * ui-select
  * http://github.com/angular-ui/ui-select
- * Version: 0.12.0 - 2015-05-29T20:35:52.105Z
+ * Version: 0.12.0 - 2015-06-02T09:33:24.427Z
  * License: MIT
  */
 
@@ -521,27 +521,32 @@ uis.controller('uiSelectCtrl',
           }
         }
 
-        $scope.$broadcast('uis:select', item);
+        handleSelectedItem(item, skipFocusser);
 
-        var locals = {};
-        locals[ctrl.parserResult.itemName] = item;
-
-        $timeout(function(){
-          ctrl.onSelectCallback($scope, {
-            $item: item,
-            $model: ctrl.parserResult.modelMapper($scope, locals)
-          });
-        });
-
-        if (ctrl.closeOnSelect) {
-          ctrl.close(skipFocusser);
-        }
         if ($event && $event.type === 'click') {
           ctrl.clickTriggeredSelect = true;
         }
       }
     }
   };
+
+  function handleSelectedItem(item, skipFocusser) {
+    $scope.$broadcast('uis:select', item);
+
+    var locals = {};
+    locals[ctrl.parserResult.itemName] = item;
+
+    $timeout(function(){
+      ctrl.onSelectCallback($scope, {
+        $item: item,
+        $model: ctrl.parserResult.modelMapper($scope, locals)
+      });
+    });
+
+    if (ctrl.closeOnSelect) {
+      ctrl.close(skipFocusser);
+    }
+  }
 
   // Closes the dropdown
   ctrl.close = function(skipFocusser) {
@@ -559,13 +564,15 @@ uis.controller('uiSelectCtrl',
   };
 
   ctrl.clear = function($event) {
-    ctrl.activeIndex = -1;
-    ctrl.select(undefined);
+    //ctrl.activeIndex = -1;
+    handleSelectedItem(undefined);
     $event.stopPropagation();
     $timeout(function() {
       ctrl.focusser[0].focus();
     }, 0, false);
   };
+
+
 
   // Toggle dropdown
   ctrl.toggle = function(e) {

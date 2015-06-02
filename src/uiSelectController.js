@@ -284,27 +284,32 @@ uis.controller('uiSelectCtrl',
           }
         }
 
-        $scope.$broadcast('uis:select', item);
+        handleSelectedItem(item, skipFocusser);
 
-        var locals = {};
-        locals[ctrl.parserResult.itemName] = item;
-
-        $timeout(function(){
-          ctrl.onSelectCallback($scope, {
-            $item: item,
-            $model: ctrl.parserResult.modelMapper($scope, locals)
-          });
-        });
-
-        if (ctrl.closeOnSelect) {
-          ctrl.close(skipFocusser);
-        }
         if ($event && $event.type === 'click') {
           ctrl.clickTriggeredSelect = true;
         }
       }
     }
   };
+
+  function handleSelectedItem(item, skipFocusser) {
+    $scope.$broadcast('uis:select', item);
+
+    var locals = {};
+    locals[ctrl.parserResult.itemName] = item;
+
+    $timeout(function(){
+      ctrl.onSelectCallback($scope, {
+        $item: item,
+        $model: ctrl.parserResult.modelMapper($scope, locals)
+      });
+    });
+
+    if (ctrl.closeOnSelect) {
+      ctrl.close(skipFocusser);
+    }
+  }
 
   // Closes the dropdown
   ctrl.close = function(skipFocusser) {
@@ -322,13 +327,14 @@ uis.controller('uiSelectCtrl',
   };
 
   ctrl.clear = function($event) {
-    ctrl.activeIndex = -1;
-    ctrl.select(undefined);
+    handleSelectedItem(undefined);
     $event.stopPropagation();
     $timeout(function() {
       ctrl.focusser[0].focus();
     }, 0, false);
   };
+
+
 
   // Toggle dropdown
   ctrl.toggle = function(e) {
