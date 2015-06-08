@@ -1072,7 +1072,7 @@ describe('ui-select tests', function() {
     expect(scope.$model).toBe(scope.$item);
   });
 
-  it('should allow creating tag in single select mode with tagging enabled', function() {
+  it('should allow creating tag in single select mode with tagging enabled, no labels', function() {
 
     scope.taggingFunc = function (name) {
       return name;
@@ -1124,7 +1124,7 @@ describe('ui-select tests', function() {
     expect($(el).scope().$select.selected).toEqual(['idontexist']);
   });
 
-  it('should remove item by pressing X icon in single select mode without labels and with tagging enabled', function() {
+  it('should remove item by pressing X icon in single select mode without labels and with tagging enabled, no labels', function() {
     scope.taggingFunc = function (name) {
       return name;
     };
