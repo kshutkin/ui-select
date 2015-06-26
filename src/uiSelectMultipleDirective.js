@@ -151,7 +151,6 @@ uis.directive('uiSelectMultiple', ['uiSelectMinErr','$timeout', function(uiSelec
           }
         }
         $select.selected = ngModel.$viewValue;
-        $selectMultiple.refreshComponent();
         scope.$evalAsync(); //To force $digest
       };
 

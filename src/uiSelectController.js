@@ -149,7 +149,22 @@ uis.controller('uiSelectCtrl',
         ctrl.setItemsFn(data);
       }else{
         if ( data !== undefined ) {
-          var filteredItems = data.filter(function(i) {return selectedItems.indexOf(i) < 0;});
+          var filteredItems = data.filter(function(i) {
+            if (ctrl.parserResult.trackByExp) {
+              var matches = /\.(.+)/.exec(ctrl.parserResult.trackByExp);
+
+              if (matches.length > 0) {
+                for (var selectedIndex = 0; selectedIndex < selectedItems.length; selectedIndex++) {
+                  if (selectedItems[selectedIndex][matches[1]] == i[matches[1]]) {
+                    return false;
+                  }
+                }
+              }
+
+              return true;
+            }
+            return selectedItems.indexOf(i) < 0;
+          });
           ctrl.setItemsFn(filteredItems);
         }
       }

@@ -1,7 +1,7 @@
 /*!
  * ui-select
  * http://github.com/angular-ui/ui-select
- * Version: 0.12.0 - 2015-06-25T14:49:14.439Z
+ * Version: 0.12.0 - 2015-06-26T09:15:41.824Z
  * License: MIT
  */
 
@@ -386,7 +386,22 @@ uis.controller('uiSelectCtrl',
         ctrl.setItemsFn(data);
       }else{
         if ( data !== undefined ) {
-          var filteredItems = data.filter(function(i) {return selectedItems.indexOf(i) < 0;});
+          var filteredItems = data.filter(function(i) {
+            if (ctrl.parserResult.trackByExp) {
+              var matches = /\.(.+)/.exec(ctrl.parserResult.trackByExp);
+
+              if (matches.length > 0) {
+                for (var selectedIndex = 0; selectedIndex < selectedItems.length; selectedIndex++) {
+                  if (selectedItems[selectedIndex][matches[1]] == i[matches[1]]) {
+                    return false;
+                  }
+                }
+              }
+
+              return true;
+            }
+            return selectedItems.indexOf(i) < 0;
+          });
           ctrl.setItemsFn(filteredItems);
         }
       }
@@ -1247,7 +1262,6 @@ uis.directive('uiSelectMultiple', ['uiSelectMinErr','$timeout', function(uiSelec
           }
         }
         $select.selected = ngModel.$viewValue;
-        $selectMultiple.refreshComponent();
         scope.$evalAsync(); //To force $digest
       };
 
