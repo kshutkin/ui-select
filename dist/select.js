@@ -1,7 +1,7 @@
 /*!
  * ui-select
  * http://github.com/angular-ui/ui-select
- * Version: 0.12.0 - 2015-08-07T13:07:11.168Z
+ * Version: 0.12.0 - 2015-08-10T16:17:02.343Z
  * License: MIT
  */
 
@@ -492,7 +492,9 @@ uis.controller('uiSelectCtrl',
 
   // When the user selects an item with ENTER or clicks the dropdown
   ctrl.select = function(item, skipFocusser, $event) {
-    $event.preventDefault(); //to prevent onbeforeunload in IE9
+    if ($event) {
+      $event.preventDefault(); //to prevent onbeforeunload in IE9
+    }
 
     if (item === undefined || !item._uiSelectChoiceDisabled) {
 
