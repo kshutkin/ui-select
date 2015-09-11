@@ -27,6 +27,7 @@ uis.directive('uiSelectChoices',
 
         $select.disableChoiceExpression = attrs.uiDisableChoice;
         $select.onHighlightCallback = attrs.onHighlight;
+        $select.compareTextBy = attrs.compareTextBy;
 
         if(groupByExp) {
           var groups = element.querySelectorAll('.ui-select-choices-group');
