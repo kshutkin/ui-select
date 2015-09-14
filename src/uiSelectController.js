@@ -519,28 +519,31 @@ uis.controller('uiSelectCtrl',
       var item;
       var hasTag = false;
       var dupeIndex = -1;
+      var tagItemIndex;
 
       // case for object tagging via transform `ctrl.tagging.fct` function
       if (ctrl.tagging.fct !== undefined) {
 
         tagItems = ctrl.$filter('filter')(items, {'isTag': true});
         if (tagItems.length > 0) {
-          tagItem = tagItems[0];
+          tagItem = tagItems[tagItems.length - 1];
         }
 
         if (_isExactCaseInsensitiveMatchExists()) {
           if (tagItem) {
-            return _refreshItems(items.slice(1, items.length));
+            items.splice(items.indexOf(tagItem), 1);
+            return _refreshItems(items);
           } else {
             return _refreshItems(items);
           }
         }
 
-        // remove the first element, if it has the `isTag` prop we generate a new one with each keyup, shaving the previous
+        // remove the tagItem element, if it has the `isTag` prop we generate a new one with each keyup, shaving the previous
         if (items.length > 0 && tagItem) {
           hasTag = true;
-          items = items.slice(1, items.length);
-          stashArr = stashArr.slice(1, stashArr.length);
+          tagItemIndex = items.indexOf(tagItem);
+          items.splice(tagItemIndex, 1);
+          stashArr.splice(tagItemIndex, 1);
         }
 
         newItem = ctrl.tagging.fct(ctrl.search);
@@ -565,16 +568,17 @@ uis.controller('uiSelectCtrl',
         });
 
         if (tagItems.length > 0) {
-          tagItem = tagItems[0];
+          tagItem = tagItems[tagItems.length - 1];
         }
 
-        item = items[0];
+        item = items[items.length - 1];
 
         // remove existing tag item if found (should only ever be one tag item)
         if (item !== undefined && items.length > 0 && tagItem) {
           hasTag = true;
-          items = items.slice(1, items.length);
-          stashArr = stashArr.slice(1, stashArr.length);
+          tagItemIndex = items.indexOf(tagItem);
+          items.splice(tagItemIndex, 1);
+          stashArr.splice(tagItemIndex, 1);
         }
 
         newItem = ctrl.search + ' ' + ctrl.taggingLabel;
@@ -596,7 +600,7 @@ uis.controller('uiSelectCtrl',
         if (_findCaseInsensitiveDupe(stashArr)) {
           // if there is a tag from prev iteration, strip it
           if (hasTag) {
-            ctrl.items = stashArr.slice(1, stashArr.length);
+            ctrl.items = stashArr.slice(0, -1);
           }
           return _refreshItems(items);
         }
@@ -608,11 +612,11 @@ uis.controller('uiSelectCtrl',
 
       // dupe found, shave the first item
       if (dupeIndex > -1) {
-        items = items.slice(dupeIndex + 1, items.length - 1);
+        items.splice(dupeIndex, 1);
       } else {
         items = [];
-        items.push(newItem);
         items = items.concat(stashArr);
+        items.push(newItem);
       }
 
       return _refreshItems(items);
@@ -622,7 +626,8 @@ uis.controller('uiSelectCtrl',
       if (ctrl.tagging.fct !== undefined) {
         tagItems = ctrl.$filter('filter')(items, {'isTag': true});
         if (tagItems.length > 0) {
-          return _refreshItems(items.slice(1, items.length));
+          items.splice(items.indexOf(tagItems[0]), 1);
+          return _refreshItems(items);
         }
       } else {
         //TODO implement tagging item removing when search string is empty
@@ -656,14 +661,12 @@ uis.controller('uiSelectCtrl',
     if ( arr === undefined || ctrl.search === undefined ) {
       return false;
     }
-    var hasDupe = arr.filter( function (origItem) {
-          if ( origItem === undefined || origItem === null ) {
-            return false;
-          }
-          return origItem.toUpperCase() === ctrl.search.toUpperCase();
-        }).length > 0;
-
-    return hasDupe;
+    return arr.filter(function (origItem) {
+      if (origItem === undefined || origItem === null) {
+        return false;
+      }
+      return origItem.toUpperCase() === ctrl.search.toUpperCase();
+    }).length > 0;
   }
   function _findApproxDupe(haystack, needle) {
     var dupeIndex = -1;
@@ -690,7 +693,7 @@ uis.controller('uiSelectCtrl',
   }
 
   function _refreshItems(items){
-    $scope.$evalAsync( function () {
+    $scope.$evalAsync(function () {
       ctrl.activeIndex = 0;
       ctrl.items = items;
     });
