@@ -1,7 +1,7 @@
 /*!
  * ui-select
  * http://github.com/angular-ui/ui-select
- * Version: 0.12.0 - 2015-09-14T10:44:27.185Z
+ * Version: 0.12.0 - 2015-09-18T08:59:11.146Z
  * License: MIT
  */
 
@@ -369,7 +369,14 @@ uis.controller('uiSelectCtrl',
     }
 
     function setPlainItems(items) {
-      ctrl.items = items;
+      if (items && angular.isArray(items) && ctrl.tagging.isActivated) {
+        var tagItems = ctrl.items.filter(function (item) {
+          return item.isTag;
+        });
+        ctrl.items = items.concat(tagItems);
+      } else {
+        ctrl.items = items;
+      }
     }
 
     ctrl.setItemsFn = groupByExp ? updateGroups : setPlainItems;

@@ -131,7 +131,14 @@ uis.controller('uiSelectCtrl',
     }
 
     function setPlainItems(items) {
-      ctrl.items = items;
+      if (items && angular.isArray(items) && ctrl.tagging.isActivated) {
+        var tagItems = ctrl.items.filter(function (item) {
+          return item.isTag;
+        });
+        ctrl.items = items.concat(tagItems);
+      } else {
+        ctrl.items = items;
+      }
     }
 
     ctrl.setItemsFn = groupByExp ? updateGroups : setPlainItems;
