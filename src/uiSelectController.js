@@ -154,7 +154,7 @@ uis.controller('uiSelectCtrl',
       //TODO should implement for single mode removeSelected
       if ((angular.isArray(selectedItems) && !selectedItems.length) || !ctrl.removeSelected) {
         ctrl.setItemsFn(data);
-      }else{
+      } else {
         if ( data !== undefined ) {
           var filteredItems = data.filter(function(i) {
             if (ctrl.parserResult.trackByExp) {
