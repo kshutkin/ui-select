@@ -208,11 +208,16 @@ uis.directive('uiSelect',
 
         // Hold on to a reference to the .ui-select-container element for appendToBody support
         var placeholder = null,
+            backdrop = null,
             originalWidth = '';
 
         function positionDropdown() {
           // Remember the absolute position of the element
           var offset = uisOffset(element);
+
+          //Add backdrop
+          backdrop = angular.element('<div class="ui-select-backdrop"></div>');
+          $document.find('body').append(backdrop);
 
           // Clone the element into a placeholder element to take its original place in the DOM
           placeholder = angular.element('<div class="ui-select-placeholder"></div>');
@@ -234,6 +239,11 @@ uis.directive('uiSelect',
         }
 
         function resetDropdown() {
+          if (backdrop) {
+            backdrop.remove();
+            backdrop = null;
+          }
+
           if (placeholder === null) {
             // The dropdown has not actually been display yet, so there's nothing to reset
             return;

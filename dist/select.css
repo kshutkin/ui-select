@@ -1,7 +1,7 @@
 /*!
  * ui-select
  * http://github.com/angular-ui/ui-select
- * Version: 0.12.0 - 2015-09-18T08:59:11.154Z
+ * Version: 0.12.0 - 2015-09-23T11:49:33.510Z
  * License: MIT
  */
 
@@ -259,4 +259,12 @@ body > .ui-select-bootstrap.open {
 /* Handle up direction Bootstrap */
 .ui-select-container[theme="bootstrap"].direction-up .ui-select-dropdown {
     box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.25);
+}
+
+.ui-select-backdrop {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
 }

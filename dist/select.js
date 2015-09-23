@@ -1,7 +1,7 @@
 /*!
  * ui-select
  * http://github.com/angular-ui/ui-select
- * Version: 0.12.0 - 2015-09-18T08:59:11.146Z
+ * Version: 0.12.0 - 2015-09-23T11:49:33.506Z
  * License: MIT
  */
 
@@ -392,7 +392,7 @@ uis.controller('uiSelectCtrl',
       //TODO should implement for single mode removeSelected
       if ((angular.isArray(selectedItems) && !selectedItems.length) || !ctrl.removeSelected) {
         ctrl.setItemsFn(data);
-      }else{
+      } else {
         if ( data !== undefined ) {
           var filteredItems = data.filter(function(i) {
             if (ctrl.parserResult.trackByExp) {
@@ -1210,11 +1210,16 @@ uis.directive('uiSelect',
 
         // Hold on to a reference to the .ui-select-container element for appendToBody support
         var placeholder = null,
+            backdrop = null,
             originalWidth = '';
 
         function positionDropdown() {
           // Remember the absolute position of the element
           var offset = uisOffset(element);
+
+          //Add backdrop
+          backdrop = angular.element('<div class="ui-select-backdrop"></div>');
+          $document.find('body').append(backdrop);
 
           // Clone the element into a placeholder element to take its original place in the DOM
           placeholder = angular.element('<div class="ui-select-placeholder"></div>');
@@ -1236,6 +1241,11 @@ uis.directive('uiSelect',
         }
 
         function resetDropdown() {
+          if (backdrop) {
+            backdrop.remove();
+            backdrop = null;
+          }
+
           if (placeholder === null) {
             // The dropdown has not actually been display yet, so there's nothing to reset
             return;
