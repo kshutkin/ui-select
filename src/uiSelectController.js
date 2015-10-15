@@ -53,7 +53,7 @@ uis.controller('uiSelectCtrl',
     if (ctrl.resetSearchInput || (ctrl.resetSearchInput === undefined && uiSelectConfig.resetSearchInput)) {
       ctrl.search = EMPTY_SEARCH;
       //reset activeIndex
-      if (ctrl.selected && ctrl.items && ctrl.items.length && !ctrl.multiple) {
+      if (ctrl.selected && ctrl.items.length && !ctrl.multiple) {
         ctrl.activeIndex = ctrl.items.indexOf(ctrl.selected);
       }
     }
