@@ -259,6 +259,12 @@ uis.controller('uiSelectCtrl',
     return isDisabled;
   };
 
+  $scope.$on('uis:clearTags', function () {
+    ctrl.items= ctrl.items.filter(function (item) {
+      return !item.isTag;
+    });
+  });
+
 
   // When the user selects an item with ENTER or clicks the dropdown
   ctrl.select = function(item, skipFocusser, $event) {
