@@ -1,7 +1,7 @@
 /*!
  * ui-select
  * http://github.com/angular-ui/ui-select
- * Version: 0.12.0 - 2016-03-16T14:57:46.065Z
+ * Version: 0.12.0 - 2016-03-18T14:52:11.964Z
  * License: MIT
  */
 
@@ -262,9 +262,13 @@ body > .ui-select-bootstrap.open {
 }
 
 .ui-select-backdrop {
-    position: absolute;
+    position: fixed;
     left: 0;
     right: 0;
     top: 0;
     bottom: 0;
+    z-index: 10000;
+    overflow: hidden;
+    opacity: 0.001;
+    background-color: #000;
 }
