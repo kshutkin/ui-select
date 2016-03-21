@@ -259,7 +259,7 @@ body > .ui-select-bootstrap.open {
     right: 0;
     top: 0;
     bottom: 0;
-    z-index: 10000;
+    z-index: 1000;
     overflow: hidden;
     opacity: 0.001;
     background-color: #000;
