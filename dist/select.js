@@ -1,7 +1,7 @@
 /*!
  * ui-select
  * http://github.com/angular-ui/ui-select
- * Version: 0.12.0 - 2016-03-16T14:57:46.060Z
+ * Version: 0.12.0 - 2016-03-25T11:51:17.198Z
  * License: MIT
  */
 
@@ -1157,6 +1157,7 @@ uis.directive('uiSelect',
             var targetScope = angular.element(e.target).scope(); //To check if target is other ui-select
             var skipFocusser = targetScope && targetScope.$select && targetScope.$select !== $select; //To check if target is other ui-select
             if (!skipFocusser) skipFocusser =  ~focusableControls.indexOf(e.target.tagName.toLowerCase()); //Check if target is input, button or textarea
+            if (!skipFocusser) skipFocusser = (angular.element(e.target).css('cursor') === 'text');
             $select.close(skipFocusser);
             scope.$digest();
           }
@@ -1226,6 +1227,120 @@ uis.directive('uiSelect',
           //Add backdrop
           backdrop = angular.element('<div class="ui-select-backdrop"></div>');
           $document.find('body').append(backdrop);
+          backdrop.on('mousemove', function (event) {
+            // peak at the element below
+            var theElement = angular.element(this);
+            var origDisplayAttribute = theElement.css('display');
+            theElement.css('display','none');
+
+            var underneathElem = document.elementFromPoint(event.clientX, event.clientY);
+            var cursor = angular.element(underneathElem).css('cursor');
+            if (cursor === 'auto') {
+              if (underneathElem.tagName == 'INPUT' || underneathElem.tagName == 'TEXTAREA') {
+                cursor = 'text';
+              }
+            }
+            backdrop.css('cursor', cursor);
+
+            if(origDisplayAttribute)
+              theElement
+                  .css('display', origDisplayAttribute);
+            else
+              theElement.css('display','');
+          });
+          backdrop.on('click', function (event) {
+            // peak at the element below
+            var theElement = angular.element(this);
+            var origDisplayAttribute = theElement.css('display');
+            theElement.css('display','none');
+
+            var underneathElem = document.elementFromPoint(event.clientX, event.clientY);
+
+            $timeout(function () {
+              underneathElem.focus();
+              $timeout(function () {
+                underneathElem.click();
+
+                var e, pos, range, x = event.clientX, y = event.clientY;
+
+                //used jCaret (MIT)
+                if (x == null) {
+                  x = 0;
+                }
+                if (y == null) {
+                  y = 0;
+                }
+                try {
+                  if (document.caretPositionFromPoint != null) {
+                    pos = document.caretPositionFromPoint(x, y);
+                    setCaret(pos.offset);
+                  } else if (document.caretRangeFromPoint != null) {
+                    //not works properly because of webkit bug
+                    //range = $document.caretRangeFromPoint(x, y);
+                    //setCaret(range.startOffset);
+                  } else if (document.body.createTextRange != null) {
+                    range = document.body.createTextRange();
+                    range.moveToPoint(x, y);
+                    range.select();
+                  }
+                } catch (_error) {
+                  e = _error;
+                  var val = underneathElem.value;
+                  underneathElem.value = ''; // unset first
+                  underneathElem.value = val; // re-set next
+                }
+
+                //used jCaret (MIT)
+                function setCaret(start, end) {
+                  var sel;
+
+                  if (start == null) {
+                    start = 0;
+                  }
+                  if (end == null) {
+                    end = start;
+                  }
+                  if (window.getSelection != null) {
+                    (sel = window.getSelection()).removeAllRanges();
+                  }
+                  angular.element(underneathElem).each(function() {
+                    var e, range, _ref;
+
+                    try {
+                      if ((_ref = this.childNodes) != null ? _ref.length : void 0) {
+                        if (document.createRange != null) {
+                          range = document.createRange();
+                          range.setStart(this.childNodes[0], start);
+                          range.setEnd(this.childNodes[0], end);
+                          return sel.addRange(range);
+                        }
+                      } else if (this.setSelectionRange != null) {
+                        return this.setSelectionRange(start, end);
+                      } else if (this.createTextRange != null) {
+                        range = this.createTextRange;
+                        range.collapse(true);
+                        range.moveEnd('character', end);
+                        range.moveStart('character', start);
+                        return range.select();
+                      } else {
+                        this.selectionStart = start;
+                        return this.selectionEnd = end;
+                      }
+                    } catch (_error) {
+                      e = _error;
+                    }
+                  });
+                  return this;
+                }
+              });
+            });
+
+            if(origDisplayAttribute)
+              theElement
+                  .css('display', origDisplayAttribute);
+            else
+              theElement.css('display','');
+          });
 
           // Clone the element into a placeholder element to take its original place in the DOM
           placeholder = angular.element('<div class="ui-select-placeholder"></div>');
