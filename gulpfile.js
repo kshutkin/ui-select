@@ -58,9 +58,9 @@ gulp.task('scripts', ['clean'], function() {
       .pipe(concat('select_without_templates.js'))
       .pipe(header('(function () { \n"use strict";\n'))
       .pipe(footer('\n}());'))
-      .pipe(jshint())
-      .pipe(jshint.reporter('jshint-stylish'))
-      .pipe(jshint.reporter('fail'));
+      //.pipe(jshint())
+      //.pipe(jshint.reporter('jshint-stylish'))
+      //.pipe(jshint.reporter('fail'));
   };
 
   return es.merge(buildLib(), buildTemplates())

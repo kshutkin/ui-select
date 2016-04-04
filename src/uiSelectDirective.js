@@ -144,13 +144,7 @@ uis.directive('uiSelect',
           }
 
           if (!contains && !$select.clickTriggeredSelect) {
-            //Will lose focus only with certain targets
-            var focusableControls = ['input','button','textarea'];
-            var targetScope = angular.element(e.target).scope(); //To check if target is other ui-select
-            var skipFocusser = targetScope && targetScope.$select && targetScope.$select !== $select; //To check if target is other ui-select
-            if (!skipFocusser) skipFocusser =  ~focusableControls.indexOf(e.target.tagName.toLowerCase()); //Check if target is input, button or textarea
-            if (!skipFocusser) skipFocusser = (angular.element(e.target).css('cursor') === 'text');
-            $select.close(skipFocusser);
+            $select.close(true);
             scope.$digest();
           }
           $select.clickTriggeredSelect = false;
