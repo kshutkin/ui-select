@@ -543,12 +543,7 @@ uis.controller('uiSelectCtrl',
         }
 
         if (_isExactCaseInsensitiveMatchExists()) {
-          if (tagItem) {
-            items.splice(items.indexOf(tagItem), 1);
-            return _refreshItems(items);
-          } else {
-            return _refreshItems(items);
-          }
+          return _refreshItems(items);
         }
 
         // remove the tagItem element, if it has the `isTag` prop we generate a new one with each keyup, shaving the previous
